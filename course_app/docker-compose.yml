@@ -7,6 +7,7 @@ services:
       bash -c "uvicorn main:course_app --host 0.0.0.0 --port 8000"
     volumes:
       - .:/course_app
+      - static_volume:/course_app/static
     ports:
       - "8000:8000"
     depends_on:
@@ -22,5 +23,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/course_app/static
+    depends_on:
+      - web
+
 volumes:
   postgres_data:
+  static_volume:
